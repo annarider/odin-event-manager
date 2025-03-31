@@ -15,6 +15,10 @@ def clean_phone_number(phone)
   return nil if digits.size != 10
 end
 
+def find_hour(datetime)
+  datetime.hour
+end
+
 def legislators_by_zipcode(zip)
   civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
   civic_info.key = 'AIzaSyClRzDqDh5MsXwnCWi0kOiiBivP6JsSyBw'
@@ -54,6 +58,7 @@ erb_template = ERB.new template_letter
 contents.each do |row|
   id = row[0]
   name = row[:first_name]
+  hour = find_hour(DateTime.strptime(row[:regdate], '%m/%d/%y %H:%M'))
   homephone = clean_phone_number(row[:homephone])
   zipcode = clean_zipcode(row[:zipcode])
   legislators = legislators_by_zipcode(zipcode)
