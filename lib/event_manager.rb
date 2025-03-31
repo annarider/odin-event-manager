@@ -19,6 +19,10 @@ def find_hour(datetime)
   datetime.hour
 end
 
+def find_day_of_week(datetime)
+  datetime.strftime('%A')
+end
+
 def legislators_by_zipcode(zip)
   civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
   civic_info.key = 'AIzaSyClRzDqDh5MsXwnCWi0kOiiBivP6JsSyBw'
@@ -58,7 +62,9 @@ erb_template = ERB.new template_letter
 contents.each do |row|
   id = row[0]
   name = row[:first_name]
-  hour = find_hour(DateTime.strptime(row[:regdate], '%m/%d/%y %H:%M'))
+  reg_datetime = DateTime.strptime(row[:regdate], '%m/%d/%y %H:%M')
+  hour = find_hour(reg_datetime)
+  p find_day_of_week(reg_datetime)
   homephone = clean_phone_number(row[:homephone])
   zipcode = clean_zipcode(row[:zipcode])
   legislators = legislators_by_zipcode(zipcode)
